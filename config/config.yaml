@@ -1,0 +1,46 @@
+# Watermark Removal Configuration
+
+# Model settings
+model:
+  name: "unet_watermark_remover"
+  architecture: "unet"  # unet, resnet_unet, attention_unet
+  input_channels: 3
+  output_channels: 3
+  features: [64, 128, 256, 512]
+  pretrained_path: null  # models/pretrained/model.pth
+  
+# Training settings (for future use)
+training:
+  batch_size: 4
+  learning_rate: 0.0001
+  epochs: 100
+  save_interval: 10
+  
+# Image processing
+image:
+  input_size: [512, 512]  # Height, Width
+  normalization:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+  
+# Watermark detection
+detection:
+  method: "adaptive_threshold"  # adaptive_threshold, edge_detection, ai
+  threshold: 0.5
+  min_area: 100
+  max_area: 50000
+  
+# Removal settings
+removal:
+  method: "inpainting"  # inpainting, ai, hybrid
+  inpainting_radius: 3
+  algorithm: "telea"  # telea, ns
+  
+# Output settings
+output:
+  format: "png"  # png, jpg, webp
+  quality: 95
+  save_comparison: true
+  
+# Device
+device: "auto"  # auto, cpu, cuda, mps
