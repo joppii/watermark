@@ -108,11 +108,13 @@ uploaded = files.upload()
 
 ```python
 # 学習開始（GPU使用）
+# T4 GPU (15GB): batch-size 8 推奨
+# メモリエラーが出たら 4 または 2 に下げてください
 !python src/train.py \
   --clean-dir data/train/clean \
   --watermarked-dir data/train/watermarked \
   --epochs 100 \
-  --batch-size 16 \
+  --batch-size 8 \
   --val-split 0.1
 ```
 
@@ -256,28 +258,65 @@ display(Image('output/result_comparison.png'))
 ## 📌 重要なヒント
 
 ### 1. Colabセッションの制限
+
 - 無料版: 最大12時間
 - 長時間学習の場合、チェックポイントから再開可能
 
 ### 2. セッション切断対策
+
 ```python
 # 定期的にチェックポイントをDriveに保存
 !cp models/pretrained/*.pth /content/drive/MyDrive/checkpoints/
 ```
 
 ### 3. 学習を再開
+
 ```python
 !python src/train.py \
   --clean-dir data/train/clean \
   --watermarked-dir data/train/watermarked \
   --resume /content/drive/MyDrive/checkpoints/checkpoint_epoch_50.pth \
   --epochs 100 \
-  --batch-size 16
+  --batch-size 8
 ```
 
-### 4. バッチサイズの調整
-- **T4 GPU**: batch_size=16-32
-- **メモリエラー時**: batch_size=8
+### 4. バッチサイズの調整（重要！）
+
+**メモリエラーが出た場合の対処法:**
+
+```bash
+# Step 1: バッチサイズを下げる
+!python src/train.py \
+  --clean-dir data/train/clean \
+  --watermarked-dir data/train/watermarked \
+  --epochs 100 \
+  --batch-size 4 \
+  --val-split 0.1
+
+# それでもエラーが出る場合: さらに下げる
+!python src/train.py \
+  --clean-dir data/train/clean \
+  --watermarked-dir data/train/watermarked \
+  --epochs 100 \
+  --batch-size 2 \
+  --val-split 0.1
+```
+
+**推奨バッチサイズ:**
+
+- **T4 GPU (15GB VRAM)**: batch_size=8（データ量により4-8）
+- **メモリ不足時**: batch_size=4 または 2
+- **画像サイズを小さく**: config.yamlで `input_size: [256, 256]`
+
+### 5. GPUメモリをクリア
+
+```python
+# 学習前にメモリをクリア
+import torch
+torch.cuda.empty_cache()
+import gc
+gc.collect()
+```
 
 ## 🔗 便利なリンク
 
