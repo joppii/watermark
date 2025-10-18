@@ -149,22 +149,12 @@ watermark/
 - **デコーダー**: 高解像度で再構築
 - **スキップ接続**: 詳細情報を保持
 
-### モデルの学習
-
-**ローカルで学習**: [TRAINING.md](TRAINING.md) を参照
-
-**Google Colabで学習（推奨）**: 
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/joppii/watermark/blob/main/train_watermark_removal.ipynb)
-
-無料のGPUを使って高速学習できます。詳細は [COLAB_GUIDE.md](COLAB_GUIDE.md) を参照。
-
 ### 事前学習済みモデル
 
 現在、モデルはランダム初期化です。より良い結果を得るには：
 
-1. Google Colabまたはローカルでモデルを学習（推奨）
-2. 学習済みモデルを `models/pretrained/` に配置
+1. ウォーターマーク付き/なしの画像ペアでモデルを学習
+2. 公開されている学習済みモデルをダウンロード
 3. `config/config.yaml`で`pretrained_path`を設定
 
 ## 🔧 トラブルシューティング
