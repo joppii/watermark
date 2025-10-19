@@ -225,9 +225,21 @@ class WatermarkRemover:
         
         # If mask is provided, blend only the masked region
         if mask is not None:
-            if len(mask.shape) == 2:
-                mask = np.expand_dims(mask, axis=-1)
+            import cv2
+            
+            # Ensure mask is 2D
+            if len(mask.shape) == 3:
+                mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY) if mask.shape[2] == 3 else mask[:, :, 0]
+            
+            # Resize mask to match output size
+            if mask.shape[:2] != output.shape[:2]:
+                mask = cv2.resize(mask, (output.shape[1], output.shape[0]), 
+                                interpolation=cv2.INTER_NEAREST)
+            
+            # Expand dimensions and normalize
+            mask = np.expand_dims(mask, axis=-1)
             mask = mask.astype(np.float32) / 255.0
+            
             output = output * mask + image * (1 - mask)
         
         return output
