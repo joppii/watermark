@@ -76,3 +76,4 @@ data/watermarks/
 # But keep sample images
 !sample/*.png
 !sample/*.jpg
+README.md
