@@ -61,3 +61,18 @@ htmlcov/
 
 # Tensorboard
 runs/
+
+# Data & Images
+data/original/
+data/train/
+data/watermarks/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.webp
+# But keep sample images
+!sample/*.png
+!sample/*.jpg
